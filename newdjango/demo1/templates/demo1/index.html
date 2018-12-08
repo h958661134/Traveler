@@ -1,0 +1,923 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+
+<!--[if IE 7 ]><html class="ie ie7 lte9 lte8 lte7" lang="en-US"><![endif]-->
+<!--[if IE 8]><html class="ie ie8 lte9 lte8" lang="en-US">	<![endif]-->
+<!--[if IE 9]><html class="ie ie9 lte9" lang="en-US"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html class="noIE" lang="en-US">
+<!--<![endif]-->
+	<head>
+		<title>Flusk</title>
+
+		<!-- meta -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale = 1.0, maximum-scale=1.0, user-scalable=no"/>
+
+		<!-- google fonts -->
+		<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans'>
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Serif:regular,bold"/>
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Alegreya+Sans:regular,italic,bold,bolditalic"/>
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nixie+One:regular,italic,bold,bolditalic"/>
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Alegreya+SC:regular,italic,bold,bolditalic"/>
+
+		<!-- css -->
+{#        <link rel="stylesheet" type="text/css" href="//static/css/style.css"/>#}
+		<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/static/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/static/css/style.css" media="screen"/>
+		<link rel="stylesheet" href="/static/css/layui.css"  media="all">
+		<link rel="stylesheet" href="/static/css/stylelb.css">
+		<link rel="stylesheet" href="/static/css/reset.css">
+		<link rel="stylesheet" type="text/css" href="/static/css/style1.css">
+
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+{#        <script src="{% /static "js/html5shiv.js" %}" type="text/javascript"></script>#}
+{#        <script src="{% /static "js/selectivizr.js" %}" type="text/javascript"></script>#}
+{#			<script src="//static/js/html5shiv.js"></script>#}
+{#			<script src="//static/js/respond.js"></script>#}
+		<![endif]-->
+
+		<!--[if IE 8]>
+{#	    	<script src="//static/js/selectivizr.js"></script>#}
+	    <![endif]-->
+	</head>
+<script src="/static/js/html5.js"></script>
+<script src="/static/js/respond.js"></script>
+<script src="/static/js/selectivizr.js"></script>
+{#        <script src="{% /static "js/html5shiv.js" %}" type="text/javascript"></script>#}
+{#        <script src="{% /static "js/selectivizr.js" %}" type="text/javascript"></script>#}
+{#        <script src="{% /static "js/respond.js" %}" type="text/javascript"></script>#}
+
+	<body>
+		<div id="drawer-right">
+            <form method="get" action="/search/">
+              {% csrf_token %}
+              <input style="width: 75%;margin: 0;z-index: 1" type="search" name="q" required lay-verify="required" placeholder="搜索" autocomplete="off" class="layui-input">
+              <button style="z-index: 20;float: right;margin-top: -38px" type="submit" class="layui-btn">搜索</button>
+            </form>
+            {% if error_msg %}
+                <p>{{ error_msg }}</p>
+            {% endif %}
+
+            {% for post in post_list %}
+              <div>
+                在这里显示文章的相应信息
+              </div>
+            {% empty %}
+              <div class="no-post">
+                没有搜索到符合条件的文章
+              </div>
+            {% endfor %}
+		</div>
+		<div id="wrapper">
+
+			<div id="header" class="content-block header-wrapper">
+				<div class="header-wrapper-inner">
+					<section class="top clearfix" style="height: 20px">
+						<div class="pull-left">
+							<h1><a class="logo" href="index.html"><img style='width: 150px' src="/static/images/yz.png"></a></h1>
+						</div>
+						<div class="pull-left" style='padding-top: 10px'>
+							<ul style="background-color:rgba(0,0,0,.0001);font-size:16px;" class="layui-nav" lay-filter="">
+							  <li class="layui-nav-item"><a href="">游者</a></li>
+							  <li class="layui-nav-item layui-this"><a href="">首页</a></li>
+							  <li class="layui-nav-item"><a href="">发现</a></li>
+							  <li class="layui-nav-item">
+							    <a href="javascript:;">团体</a>
+							  </li>
+							  <li class="layui-nav-item"><a href="">路线</a></li>
+                                {% if request.user.is_authenticated %}
+                                    <li class="layui-nav-item" lay-unselect="">
+                                    <a href="javascript:;"><img src="http://t.cn/RCzsdCq" class="layui-nav-img">{{ request.user.username }}</a>
+                                    <dl class="layui-nav-child">
+                                      <dd><a style="font-size: 12px" href="javascript:;">修改信息</a></dd>
+                                      <dd><a style="font-size: 12px" href="javascript:;">安全管理</a></dd>
+                                      <dd><a style="font-size: 12px" href="{% url 'logout' %}">退了</a></dd>
+                                    </dl>
+                                  </li>
+                                    {% else %}
+                                         <li class="layui-nav-item" lay-unselect="">
+                                            <a href="{% url 'login' %}">登录</a>
+                                         </li>
+                                {% endif %}
+
+							</ul>
+						</div>
+						<div style="color:white;padding:20px" class="pull-right">
+							<a class="toggleDrawer" href="#"><img  style='width: 50px;' src="/static/images/wxb.png" alt="">SEARCH &amp; FIND</a>
+						</div>
+					</section>
+					<section style="margin-left: -60%;" class="center">
+						<div class="slogan">
+							<img src="/static/images/yzfont.png" style='width: 200px'>
+						</div>
+						<div class="secondary-slogan">
+							<img src="/static/images/line_2.png" alt="">
+						</div>
+					</section>
+					<section class="bottom">
+						<a id="scrollToContent" href="#">
+							<img src="/static/images/arrow_down.png">
+						</a>
+					</section>
+				</div>
+			</div><!-- header -->
+
+			<div class="content-block1" id="portfolio">
+				<div id="layerDemo" class="container" style="background: url(/static/images/bc2.png) no-repeat center center;" >
+					<header class="block-heading cleafix">
+                        {% if perms.demo1.add_delete_alter %}
+                            <button data-method="offset" data-type="auto" style="background-color: rgba(0,0,0,.5)" class="layui-btn layui-btn-normal btn btn-o btn-lg pull-right">ADD</button>
+                        {% endif %}
+
+						<img src="/static/images/bi.png">
+					</header>
+					<section class="block-body ">
+						<div class="row">
+							<div class="col-sm-4">
+							<div class="card-container-1" id="layerDemo">
+                                {% for x in head1 %}
+							    <div class="card site-demo-button"  style="background-image:url({{ x.lipicture }});background-size:110%";>
+                                    <button onclick="AddButton('{{ x.id }}','{{ x.liname }}')" style="z-index: 200" data-method="notice" class="layui-btn">{{ x.liname }}</button>
+                                    <div id="{{ x.id }}" style="display: none">{{ x.litext }}</div>
+							    </div>
+                                {% endfor %}
+							  </div>
+							</div>
+							<div class="col-sm-4">
+								<div class="card-container-2">
+								    <div style="height: 80%;margin-top: 40px;" class="controller right"></div>
+								    <div style="height: 80%;margin-top: 40px;" class="controller left"></div>
+								    <div class="card-holder" id="layerDemo">
+								     {% for x in head2 %}
+                                        <div class="card site-demo-button"  style="background-image:url({{ x.lipicture }});background-size:110%";>
+                                            <button style="z-index: 2" onclick="AddButton('{{ x.id }}','{{ x.liname }}')" style="z-index: 200" data-method="notice" class="layui-btn">{{ x.liname }}</button>
+                                            <div id="{{ x.id }}" style="display: none">{{ x.litext }}</div>
+                                        </div>
+                                    {% endfor %}
+								    </div>
+								  </div>
+							</div>
+							<div class="col-sm-4">
+								<div class="card-container-3" id="layerDemo"><span class="controller right"></span><span class="controller left"></span>
+								   {% for x in head3 %}
+                                        <div class="card site-demo-button"  style="background-image:url({{ x.lipicture }});background-size:110%";>
+                                            <button style="z-index: 2" onclick="AddButton('{{ x.id }}','{{ x.liname }}')" style="z-index: 200" data-method="notice" class="layui-btn">{{ x.liname }}</button>
+                                            <div id="{{ x.id }}" style="display: none">{{ x.litext }}</div>
+                                        </div>
+                                    {% endfor %}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="card-container-4" id="layerDemo">
+								    {% for x in head4 %}
+                                        <div class="card {{ x.one }} site-demo-button" style="background-image:url({{ x.lipicture }});background-size:110%";>
+                                            <button onclick="AddButton('{{ x.id }}','{{ x.liname }}')" style="z-index: 200" data-method="notice" class="layui-btn">{{ x.liname }}</button>
+                                            <div id="{{ x.id }}" style="display: none">{{ x.litext }}</div>
+                                        </div>
+                                    {% endfor %}
+									   </div>
+							</div>
+							<div class="col-sm-4">
+								<div class="card-container-5" id="layerDemo">
+								    {% for x in head5 %}
+                                        <div class="card site-demo-button"  style="background-image:url({{ x.lipicture }});background-size:110%";>
+                                            <button onclick="AddButton('{{ x.id }}','{{ x.liname }}')" style="z-index: 200" data-method="notice" class="layui-btn">{{ x.liname }}</button>
+                                            <div id="{{ x.id }}" style="display: none">{{ x.litext }}</div>
+                                        </div>
+                                    {% endfor %}
+									   </div>
+							</div>
+							<div class="col-sm-4">
+								<div class="card-container-6" id="layerDemo">
+								    {% for x in head6 %}
+                                        <div class="card site-demo-button"  style="background-image:url({{ x.lipicture }});background-size:110%";>
+                                            <button style="z-index: 2" onclick="AddButton('{{ x.id }}','{{ x.liname }}')" style="z-index: 200" data-method="notice" class="layui-btn">{{ x.liname }}</button>
+                                            <div id="{{ x.id }}" style="display: none">{{ x.litext }}</div>
+                                        </div>
+                                    {% endfor %}
+									   </div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div><!-- #旅行博物馆 -->
+
+			<div class="content-block parallax" id="services">
+				<ul class="container text-center">
+					<header class="block-heading cleafix">
+						<img style="margin-bottom: 20px;" src="/static/images/sign.png">
+					</header>
+					<div class="cont">
+					    <div class="slider"></div>
+					    <ul class="nav"></div>
+					    <div data-target='right' class="side-nav side-nav--right"></div>
+                    <div data-target='left' class="side-nav side-nav--left"></div></ul>
+					</div>
+				</div>
+			</div><!-- #特别推荐 -->
+
+
+			<div style="background-image:url(/static/images/AberystwythSeafront_EN-AU9268158003_1920x1080.jpg)" class="content-block" id="blog">
+				<div class="container">
+					<header class="block-heading cleafix">
+						<a href="#" class="btn btn-o btn-lg pull-right">View All</a>
+						<img src="/static/images/main.png" alt="">
+					</header>
+					<section class="block-body">
+						<div class="row">
+							<div class="tab">
+								<div class="box">
+									<ul class="menus">
+										<li class="bg">我的帖子</li>
+										<li>求助帖</li>
+										<li>分享帖</li>
+										<li>攻略贴</li>
+										<li>更多分类</li>
+										<li>今日高推荐帖子</li>
+										<li>关注动态</li>
+									</ul>
+									<div class="right">
+										<div class="scroll">
+											<div class="tab_right">
+											</div>
+											<div class="tab_right">
+											</div>
+											<div class="tab_right">
+												<img src="/static/a3.png" alt="">
+											</div>
+											<div id="Post4" class="tab_right">
+                                                <div class>
+                                                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                                                      <legend></legend>
+                                                    </fieldset>
+{#                                                <div id="demo1"></div>#}
+                                                    {% for x in forum4 %}
+                                                    <div class="layui-collapse" lay-filter="test">
+                                                      <div class="layui-colla-item">
+                                                          <h2 class="layui-colla-title"><a>{{ x.Postname }}</a><b style="float: right">了解更多</b></h2>
+                                                        <div style="background-color: white" class="layui-colla-content">
+                                                          <p>{{ x.Content }}</p>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    {% endfor %}
+                                                <ul class="pagination" id="pager">
+        {#上一页按钮开始#}
+        {# 如果当前页有上一页#}
+        {% if forum4.has_previous %}
+            {#  当前页的上一页按钮正常使用#}
+            <li class="previous"><a href="/index/?page={{ forum4.previous_page_number }}">上一页</a></li>
+        {% else %}
+            {# 当前页的不存在上一页时,上一页的按钮不可用#}
+            <li class="previous disabled"><a href="#">上一页</a></li>
+        {% endif %}
+        {#上一页按钮结束#}
+        {# 页码开始#}
+        {% for num in paginator.page_range %}
+
+            {% if num == currentPage %}
+                <li class="item active"><a href="/index/?page={{ num }}">{{ num }}</a></li>
+            {% else %}
+                <li class="item"><a href="/index/?page={{ num }}">{{ num }}</a></li>
+
+            {% endif %}
+        {% endfor %}
+        {#页码结束#}
+        {# 下一页按钮开始#}
+        {% if forum4.has_next %}
+{#            <li class="next"><a href={% url '' %}>下一页</a></li>#}
+            <li class="next"><a href="/index/?page={{ forum4.next_page_number }}">下一页</a></li>
+
+        {% else %}
+            <li class="next disabled"><a href="#">下一页</a></li>
+        {% endif %}
+        {# 下一页按钮结束#}
+    </ul>
+
+                                                </div>
+											</div>
+											<div class="tab_right">
+												<img src="/static/a5.png" alt="">
+											</div>
+											<div class="tab_right">
+												<img src="/static/a6.png" alt="">
+											</div>
+											<div class="tab_right">
+												<img src="/static/a7.png" alt="">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="clear"></div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div><!-- #博客 -->
+
+
+{#			<div class="content-block parallax" id="parallax">#}
+{#				<div class="container text-center">#}
+{#					<h1>In at accumsan risus. Nam id volutpat ante. Etiam vel mi mattis, vulputate nunc nec, sodales nibh. Etiam nulla magna, gravida eget ultricies sit amet, hendrerit.</h1>#}
+{#					<a href="" class="btn btn-o-white btn-lg">Get a free quote</a>#}
+{#				</div>#}
+{#			</div><!-- #parallax -->#}
+{##}
+{#			<div style="background-image:url(/static/images/CorricellaMarina_EN-AU12546365116_1920x1080.jpg)" class="content-block" id="testimonials">#}
+{#				<div class="container">#}
+{#					<header class="block-heading cleafix">#}
+{#						<h1>Testimonials</h1>#}
+{#						<p>Some happy customers have to say.</p>#}
+{#					</header>#}
+{#					<section class="block-body">#}
+{#						<div class="row">#}
+{#							<div class="col-md-4">#}
+{#								<div class="testimonial">#}
+{#									<img src="/static/images/testimonial_31-190x190.jpg">#}
+{#									<p>In at accumsan risus. Nam id volutpat ante. Etiam vel mi mattis, vulputate nunc nec, sodales nibh. Etiam nulla magna, gravida eget ultricies sit amet, hendrerit in lorem.</p>#}
+{#									<strong>Jhon Doe</strong><br/>#}
+{#									<span>Head of Ideas, Technext</span>#}
+{#								</div>#}
+{#							</div>#}
+{#							<div class="col-md-4">#}
+{#								<div class="testimonial">#}
+{#									<img src="/static/images/testimonial_11-190x190.jpg">#}
+{#									<p>In at accumsan risus. Nam id volutpat ante. Etiam vel mi mattis, vulputate nunc nec, sodales nibh. Etiam nulla magna, gravida eget ultricies sit amet, hendrerit in lorem.</p>#}
+{#									<strong>Jane Doe</strong><br/>#}
+{#									<span>CEO, Apple Inc</span>#}
+{#								</div>#}
+{#							</div>#}
+{#							<div class="col-md-4">#}
+{#								<div class="testimonial">#}
+{#									<img src="/static/images/testimonial_22-190x190.jpg">#}
+{#									<p>In at accumsan risus. Nam id volutpat ante. Etiam vel mi mattis, vulputate nunc nec, sodales nibh. Etiam nulla magna, gravida eget ultricies sit amet, hendrerit in lorem.</p>#}
+{#									<strong>Albert Doe</strong><br/>#}
+{#									<span>Team Lead, Design Studio</span>#}
+{#								</div>#}
+{#							</div>#}
+{#						</div>#}
+{#					</section>#}
+{#				</div>#}
+{#			</div><!-- /#testimonials -->#}
+
+
+{#			<div class="content-block" id="contact">#}
+{#				<div class="container text-center">#}
+{#					<header class="block-heading cleafix">#}
+{#						<h1>Contact Us</h1>#}
+{#						<p>Feel free to drop us a line.</p>#}
+{#					</header>#}
+{#					<section class="block-body">#}
+{#						<div class="row">#}
+{#							<div class="col-md-6 col-md-offset-3">#}
+{#								<form class="" role="form">#}
+{#									<div class="form-group">#}
+{#								    	<input type="email" class="form-control form-control-white" id="subject" placeholder="Your Name" required>#}
+{#								  	</div>#}
+{#								    <div class="form-group">#}
+{#								    	<input type="email" class="form-control form-control-white" id="exampleInputEmail2" placeholder="Enter email" required>#}
+{#								    </div>#}
+{#								    <div class="form-group">#}
+{#								    	<textarea class="form-control form-control-white" placeholder="Write Something" required></textarea>#}
+{#								    </div>#}
+{#								  <input type="submit" class="btn btn-o-white" value="Say Hello">#}
+{#								</form>#}
+{#							</div>#}
+{#						</div>#}
+{#					</section>#}
+{#				</div>#}
+{#			</div><!-- #contact -->#}
+
+			<div class="content-block" id="footer">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-6">&copy; Copyright Flusk 2018</div>
+						<div class="col-xs-6 text-right">Theme by <a href="https://themewagon.com/" target="_blank">韩昊天</a></div>
+					</div>
+				</div>
+			</div><!-- #footer -->
+
+
+		</div><!--/#wrapper-->
+
+
+		<script>
+		//注意：导航 依赖 element 模块，否则无法进行功能性操作
+		layui.use('element', function(){
+		  var element = layui.element;
+
+		  //…
+		});
+		</script>
+        <script src="/static/js/layui/layui.all.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+var xtext;
+var xname;
+var xid;
+function AddButton(x,y){
+    xid=x;
+    xname=y;
+    xtext=document.getElementById(xid).innerText;
+}
+layui.use('layer', function(){ //独立版的layer无需执行这一句
+  var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+  //触发事件
+  var active = {
+    setTop: function(){
+      var that = this;
+      //多窗口模式，层叠置顶
+      layer.open({
+        type: 2 //此处以iframe举例
+        ,title: '当你选择该窗体时，即会在最顶端'
+        ,area: ['390px', '260px']
+        ,shade: 0
+        ,maxmin: true
+        ,offset: [ //为了演示，随机坐标
+          Math.random()*($(window).height()-300)
+          ,Math.random()*($(window).width()-390)
+        ]
+        ,content: 'http://layer.layui.com/test/settop.html'
+        ,btn: ['继续弹出', '全部关闭'] //只是为了演示
+        ,yes: function(){
+          $(that).click();
+        }
+        ,btn2: function(){
+          layer.closeAll();
+        }
+
+        ,zIndex: layer.zIndex //重点1
+        ,success: function(layero){
+          layer.setTop(layero); //重点2
+        }
+      });
+    }
+    ,confirmTrans: function(){
+      //配置一个透明的询问框
+      layer.msg('大部分参数都是可以公用的<br>合理搭配，展示不一样的风格', {
+        time: 20000, //20s后自动关闭
+        btn: ['明白了', '知道了', '哦']
+      });
+    }
+    ,notice: function(){
+      //示范一个公告层
+      layer.open({
+        type: 1
+        ,title: false //不显示标题栏
+        ,closeBtn: false
+        ,area: '300px;'
+        ,shade: 0.8
+        ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+        ,btn: ['删除记录', '关闭']
+        ,btnAlign: 'c'
+        ,moveType: 1 //拖拽模式，0或者1
+        ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">'+xname+'<hr>'+xtext+'</div>'
+        ,success: function(layero){
+          var btn = layero.find('.layui-layer-btn');
+          btn.find('.layui-layer-btn0').attr({
+            href: '#portfolio'
+            ,target: '_blank'
+          });
+        }
+      });
+    }
+    ,offset: function(othis){
+      var type = othis.data('type')
+      ,text = othis.text();
+
+      layer.open({
+        type: 1
+        ,offset: type //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
+        ,id: 'layerDemo'+type //防止重复弹出
+        ,content: '<form style="width:8000px" method="post" class="layui-form" action="/submit/">' +
+          '<div class="layui-form-item">\n' +
+          '   <label style=""width:100px" class="layui-form-label">景点<br>名称</label>\n' +
+          '    <div class="layui-input-block">\n' +
+          '      <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">\n' +
+          '    </div>\n' +
+          '  </div>' +
+          '<div class="layui-form-item">\n' +
+          '    <label style=""width:100px" class="layui-form-label">景点<br>图片</label>\n' +
+          '    <div class="layui-input-block">\n' +
+          '      <input type="text" name="pic_title" lay-verify="title" autocomplete="off" placeholder="请输入图片名" class="layui-input">\n' +
+          '    </div>\n' +
+          '  </div>' +
+          '<div class="layui-form-item layui-form-text">\n' +
+          '    <label style=""width:100px" class="layui-form-label">景点<br>介绍</label>\n' +
+          '    <div class="layui-input-block">\n' +
+          '      <textarea placeholder="请输入内容" name="content" class="layui-textarea"></textarea>\n' +
+          '    </div>\n' +
+          '  </div>' +
+          '<button style="z-index: 20;float: right;margin-top: -38px" type="submit" class="layui-btn">提交<tton>' +
+          '</form>'
+        ,btn: '增加'
+        ,btnAlign: 'c' //按钮居中
+        ,shade: 0 //不显示遮罩
+        ,yes: function(){
+          layer.closeAll();
+        }
+      });
+    }
+  };
+
+  $('#layerDemo .layui-btn').on('click', function(){
+    var othis = $(this), method = othis.data('method');
+    active[method] ? active[method].call(this, othis) : '';
+  });
+
+});
+</script>
+<script>
+layui.use(['laypage', 'layer'], function(){
+  var laypage = layui.laypage
+  ,layer = layui.layer;
+
+  //总页数低于页码总数
+  laypage.render({
+    elem: 'demo0'
+    ,count: 10 //数据总数
+  });
+
+  //总页数大于页码总数
+  laypage.render({
+    elem: 'demo1'
+    ,count: 10 //数据总数
+    ,jump: function(obj){
+      console.log(obj)
+    }
+  });
+
+  //自定义样式
+  laypage.render({
+    elem: 'demo2'
+    ,count: 10
+    ,theme: '#1E9FFF'
+  });
+  laypage.render({
+    elem: 'demo2-1'
+    ,count: 10
+    ,theme: '#FF5722'
+  });
+  laypage.render({
+    elem: 'demo2-2'
+    ,count: 10
+    ,theme: '#FFB800'
+  });
+
+  //自定义首页、尾页、上一页、下一页文本
+  laypage.render({
+    elem: 'demo3'
+    ,count: 10
+    ,first: '首页'
+    ,last: '尾页'
+    ,prev: '<em>←</em>'
+    ,next: '<em>→</em>'
+  });
+
+  //不显示首页尾页
+  laypage.render({
+    elem: 'demo4'
+    ,count: 100
+    ,first: false
+    ,last: false
+  });
+
+  //开启HASH
+  laypage.render({
+    elem: 'demo5'
+    ,count: 500
+    ,curr: location.hash.replace('#!fenye=', '') //获取hash值为fenye的当前页
+    ,hash: 'fenye' //自定义hash值
+  });
+
+  //只显示上一页、下一页
+  laypage.render({
+    elem: 'demo6'
+    ,count: 50
+    ,layout: ['prev', 'next']
+    ,jump: function(obj, first){
+      if(!first){
+        layer.msg('第 '+ obj.curr +' 页');
+      }
+    }
+  });
+
+  //完整功能
+  laypage.render({
+    elem: 'demo7'
+    ,count: 100
+    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+    ,jump: function(obj){
+      console.log(obj)
+    }
+  });
+
+  //自定义排版
+  laypage.render({
+    elem: 'demo8'
+    ,count: 1000
+    ,layout: ['limit', 'prev', 'page', 'next']
+  });
+  laypage.render({
+    elem: 'demo9'
+    ,count: 1000
+    ,layout: ['prev', 'next', 'page']
+  });
+  laypage.render({
+    elem: 'demo10'
+    ,count: 1000
+    ,layout: ['page', 'count']
+  });
+
+  //自定义每页条数的选择项
+  laypage.render({
+    elem: 'demo11'
+    ,count: 1000
+    ,limit: 100
+    ,limits: [100, 300, 500]
+  });
+
+
+  //将一段数组分页展示
+
+  //测试数据
+  var data = [
+    '北京',
+    '上海',
+    '广州',
+    '深圳',
+    '杭州',
+    '长沙',
+    '合肥',
+    '宁夏',
+    '成都',
+    '西安',
+    '南昌',
+    '上饶',
+    '沈阳',
+    '济南',
+    '厦门',
+    '福州',
+    '九江',
+    '宜春',
+    '赣州',
+    '宁波',
+    '绍兴',
+    '无锡',
+    '苏州',
+    '徐州',
+    '东莞',
+    '佛山',
+    '中山',
+    '成都',
+    '武汉',
+    '青岛',
+    '天津',
+    '重庆',
+    '南京',
+    '九江',
+    '香港',
+    '澳门',
+    '台北'
+  ];
+
+  //调用分页
+  laypage.render({
+    elem: 'demo20'
+    ,count: data.length
+    ,jump: function(obj){
+      //模拟渲染
+      document.getElementById('biuuu_city_list').innerHTML = function(){
+        var arr = []
+        ,thisData = data.concat().splice(obj.curr*obj.limit - obj.limit, obj.limit);
+        layui.each(thisData, function(index, item){
+          arr.push('<li>'+ item +'</li>');
+        });
+        return arr.join('');
+      }();
+    }
+  });
+
+});
+</script>
+<script>
+layui.use('upload', function(){
+  var $ = layui.jquery
+  ,upload = layui.upload;
+
+  //普通图片上传
+  var uploadInst = upload.render({
+    elem: '#test1'
+    ,url: '/upload/'
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#demo1').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+      //如果上传失败
+      if(res.code > 0){
+        return layer.msg('上传失败');
+      }
+      //上传成功
+    }
+    ,error: function(){
+      //演示失败状态，并实现重传
+      var demoText = $('#demoText');
+      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+      demoText.find('.demo-reload').on('click', function(){
+        uploadInst.upload();
+      });
+    }
+  });
+
+  //多图片上传
+  upload.render({
+    elem: '#test2'
+    ,url: '/upload/'
+    ,multiple: true
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#demo2').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
+      });
+    }
+    ,done: function(res){
+      //上传完毕
+    }
+  });
+
+  //指定允许上传的文件类型
+  upload.render({
+    elem: '#test3'
+    ,url: '/upload/'
+    ,accept: 'file' //普通文件
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+  upload.render({ //允许上传的文件后缀
+    elem: '#test4'
+    ,url: '/upload/'
+    ,accept: 'file' //普通文件
+    ,exts: 'zip|rar|7z' //只允许上传压缩文件
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+  upload.render({
+    elem: '#test5'
+    ,url: '/upload/'
+    ,accept: 'video' //视频
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+  upload.render({
+    elem: '#test6'
+    ,url: '/upload/'
+    ,accept: 'audio' //音频
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+
+  //设定文件大小限制
+  upload.render({
+    elem: '#test7'
+    ,url: '/upload/'
+    ,size: 60 //限制文件大小，单位 KB
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+
+  //同时绑定多个元素，并将属性设定在元素上
+  upload.render({
+    elem: '.demoMore'
+    ,before: function(){
+      layer.tips('接口地址：'+ this.url, this.item, {tips: 1});
+    }
+    ,done: function(res, index, upload){
+      var item = this.item;
+      console.log(item); //获取当前触发上传的元素，layui 2.1.0 新增
+    }
+  })
+
+  //选完文件后不自动上传
+  upload.render({
+    elem: '#test8'
+    ,url: '/upload/'
+    ,auto: false
+    //,multiple: true
+    ,bindAction: '#test9'
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+
+  //拖拽上传
+  upload.render({
+    elem: '#test10'
+    ,url: '/upload/'
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+
+  //多文件列表示例
+  var demoListView = $('#demoList')
+  ,uploadListIns = upload.render({
+    elem: '#testList'
+    ,url: '/upload/'
+    ,accept: 'file'
+    ,multiple: true
+    ,auto: false
+    ,bindAction: '#testListAction'
+    ,choose: function(obj){
+      var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+      //读取本地文件
+      obj.preview(function(index, file, result){
+        var tr = $(['<tr id="upload-'+ index +'">'
+          ,'<td>'+ file.name +'</td>'
+          ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
+          ,'<td>等待上传</td>'
+          ,'<td>'
+            ,'<button class="layui-btn layui-btn-mini demo-reload layui-hide">重传</button>'
+            ,'<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>'
+          ,'</td>'
+        ,'</tr>'].join(''));
+
+        //单个重传
+        tr.find('.demo-reload').on('click', function(){
+          obj.upload(index, file);
+        });
+
+        //删除
+        tr.find('.demo-delete').on('click', function(){
+          delete files[index]; //删除对应的文件
+          tr.remove();
+          uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+        });
+
+        demoListView.append(tr);
+      });
+    }
+    ,done: function(res, index, upload){
+      if(res.code == 0){ //上传成功
+        var tr = demoListView.find('tr#upload-'+ index)
+        ,tds = tr.children();
+        tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+        tds.eq(3).html(''); //清空操作
+        return delete this.files[index]; //删除文件队列已经上传成功的文件
+      }
+      this.error(index, upload);
+    }
+    ,error: function(index, upload){
+      var tr = demoListView.find('tr#upload-'+ index)
+      ,tds = tr.children();
+      tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+      tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+    }
+  });
+
+  //绑定原始文件域
+  upload.render({
+    elem: '#test20'
+    ,url: '/upload/'
+    ,done: function(res){
+      console.log(res)
+    }
+  });
+
+});
+</script>
+
+
+		<script src="/static/js/jquery-2.1.3.min.js"></script>
+		<script src="/static/js/jquery-migrate-1.2.1.min.js"></script>
+		<script src="/static/js/bootstrap.min.js"></script>
+		<script src="/static/js/jquery.actual.min.js"></script>
+		<script src="/static/js/jquery.scrollTo.min.js"></script>
+		<script src="/static/js/script.js"></script>
+		<script src="/static/js/layui.js"></script>
+		<script src="/static/js/jquery-1.11.0.min.js" type="text/javascript"></script>
+		<script src="/static/js/main.js"></script>
+		<script src="/static/js/jquery.min.js"></script>
+		<script src="/static/js/index.js"></script>
+		<script src="/static/js/jquery-1.8.3.min.js"></script>
+		<script src="/static/js/index1.js"></script>
+
+
+	</body>
+
+</html>

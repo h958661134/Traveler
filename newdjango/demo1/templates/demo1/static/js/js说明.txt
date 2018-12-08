@@ -1,0 +1,24 @@
+1、bootstrap.min.js 
+	Bootstrap，来自 Twitter，是目前最受欢迎的前端框架。
+
+2、html5.js / html5shiv.js 让IE6-8支持html5元素
+
+3、jquery.actual.min.js  
+	针对早期Jquery版本中，旧版本的jQuery很难找到不可见DOM元素的宽度/高度。
+	元素或其父元素的CSS属性“display”设置为“none”。
+	$('.inner').width();将返回0，而不是实际的宽度；
+	这个js插件可以解决这个问题。
+
+4、jquery.scrollTo.min.js 平滑滚动到任何jQuery/DOM元素
+
+5、jquery-migrate-1.2.1.min.js
+	应用迁移辅助插件
+	jQuery 版本之间有区别。比如1.9版本对于 live()，die()，toggle()，sub()，$.browser 等等都已经不支持了。 在不改变你网站代码的同时，要使用 1.9 之后的版本，你需要使用 jQuery migrate（转移、过度），详见 http://blog.jquery.com/2013/01/31/jquery-migrate-1-1-0-released/ （英文）。 所以
+	jquery-migrate-1.1.0.js
+	就是一个过渡插件，让你在原来代码上升级jquery，不用修改代码用的
+	
+6、respond.js 让IE6-8支持CSS3 最小/最大宽 Media Query
+
+7、script.js 本案例自己的js
+
+8、selectivizr.js 让IE6~8支持CSS3伪类和属性选择器
